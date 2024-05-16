@@ -2,9 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { translate } from '@vitalets/google-translate-api';
-import createHttpProxyAgent from 'http-proxy-agent';
+import { HttpProxyAgent } from 'http-proxy-agent';
 
-// const agent = createHttpProxyAgent('http://35.208.150.75:8899');
+const agent = new HttpProxyAgent('http://172.247.44.109:8080');
 const app = express();
 const port = 3000;
 
@@ -21,6 +21,7 @@ app.post('/translate', async (req, res) => {
   const { text, from, to } = await translate(req.body.text, {
     from: req.body.from,
     to: req.body.to,
+    fetchOptions: { agent },
   });
 
   res.json({ text, from, to });
